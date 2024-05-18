@@ -36,10 +36,10 @@ const TableThree = () => {
 
 
 
-   const handleDeleteRow = (index: number) => {
-    const updatedPackageData = packageData.filter((_, i) => i !== index); // Créer un nouveau tableau en filtrant les éléments à conserver
-    setPackageData(updatedPackageData); // Mettre à jour le state avec le nouveau tableau
- };
+//    const handleDeleteRow = (index: number) => {
+//     const updatedPackageData = packageData.filter((_, i) => i !== index); // Créer un nouveau tableau en filtrant les éléments à conserver
+//     setPackageData(updatedPackageData); // Mettre à jour le state avec le nouveau tableau
+//  };
 
 
   return (

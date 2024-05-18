@@ -225,7 +225,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       fill=""
                     />
                   </svg>
-                  Reports
+                  Reclamation
                 </Link>
               </li>
               {/* <!-- Menu Item reports --> */}
