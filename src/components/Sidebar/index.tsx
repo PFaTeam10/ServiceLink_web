@@ -192,7 +192,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 pathname === "/" && "text-white"
                               }`}
                             >
-                              eCommerce
+                              Generale
                             </Link>
                           </li>
                         </ul>
@@ -251,7 +251,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       fill=""
                     />
                   </svg>
-                  Calendar
+                  Calendrier
                 </Link>
               </li>
               {/* <!-- Menu Item Calendar --> */}
@@ -471,7 +471,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       </clipPath>
                     </defs>
                   </svg>
-                  Settings
+                  Parametre
                 </Link>
               </li>
               {/* <!-- Menu Item Settings --> */}
@@ -719,7 +719,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 pathname === "/auth/signin" && "text-white"
                               }`}
                             >
-                              Sign In
+                              Connexion
                             </Link>
                           </li>
                           <li>
@@ -729,7 +729,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 pathname === "/auth/signup" && "text-white"
                               }`}
                             >
-                              Sign Up
+                              S’enregistrer
                             </Link>
                           </li>
                         </ul>
