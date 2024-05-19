@@ -18,13 +18,7 @@ interface IServiceProvider {
     phoneNumber: string;
     city: string;
   }
-  
-  enum Status {
-    close = 0,
-    pending = 1,
-    finish = 2
-  }
-  
+ 
   interface IMessage{
     id:String;
     citizen: ICitizen;  

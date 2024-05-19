@@ -58,3 +58,23 @@ export async function updateReclamation(data:IReclamation): Promise<any> {
         throw error;
     }
 }
+
+
+export async function DeleteReclamation(id:string): Promise<any> {
+    try {
+        // const cookie_ = cookie.get('token-cookie') 
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/${id}`
+
+        console.log(url)
+        const response = await axios.delete(url,{
+            headers: {
+                'Authorization': "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MTYxNDE0NjgsImV4cCI6MTcxODczMzQ2OH0.v6wgJtXfpNNdkbtcp4aEZHZoYjUYH-DxJ-qxZTRPitwteyG9gtUnVDFBu59ng8XZiaV_wneL3Eu4zFBM2Btlhg"
+            }
+            
+        })
+        return response.data.data 
+ 
+    } catch (error) {
+        throw error;
+    }
+}

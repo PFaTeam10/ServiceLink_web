@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import ShowModal from '../Modal/ShowModal';
-import { getReclamations } from '@/api/Reclamations/Services';
+import { DeleteReclamation, getReclamations } from '@/api/Reclamations/Services';
 
 interface Package {
   name: string;
@@ -11,7 +11,7 @@ interface Package {
 
 
 let initialPackageData: Package[] = [
-  
+
   {
     name: "Standard Package",
     invoiceDate: `Jan 13,2023`,
@@ -21,33 +21,41 @@ let initialPackageData: Package[] = [
     name: "Business Package",
     invoiceDate: `Jan 13,2023`,
     status: "Refuser",
-  },{
+  }, {
     name: "Free package",
     invoiceDate: `Jan 13,2023`,
     status: "En attente",
   }
-  
+
 ];
 
+
+enum Status {
+  close = 0,
+  pending = 1,
+  finish = 2
+}
+
+
 const TableThree = () => {
-   // État pour stocker les données du client sélectionné
-   const [packageData, setPackageData] = useState<Package[]>(initialPackageData);
-   const [showModal, setShowModal] = useState(false); // État pour contrôler l'affichage du modal
-   const [selectedClient, setSelectedClient] = useState<ClientData | null>(null);
-   const [reclamations, setReclamations] = useState<IReclamation>([]);
+  // État pour stocker les données du client sélectionné
+  const [packageData, setPackageData] = useState<Package[]>(initialPackageData);
+  const [showModal, setShowModal] = useState(false); // État pour contrôler l'affichage du modal
+  const [selectedClient, setSelectedClient] = useState<ClientData | null>(null);
+  const [reclamations, setReclamations] = useState<IReclamation[]>([]);
 
-   // Fonction pour ouvrir le modal avec les données du client sélectionné
-   const handleOpenModal = (client: any) => {
-     setSelectedClient(client); 
-     setShowModal(true);
-   }; 
+  // Fonction pour ouvrir le modal avec les données du client sélectionné
+  const handleOpenModal = (client: any) => {
+    setSelectedClient(client);
+    setShowModal(true);
+  };
 
-   const handleCloseModal = () => {
+  const handleCloseModal = () => {
     setShowModal(false);
     setSelectedClient(null);
   };
 
-   const handleStatusChange = (newStatus: string) => {
+  const handleStatusChange = (newStatus: string) => {
     if (selectedClient) {
       const updatedPackageData = packageData.map((pkg) =>
         pkg.name === selectedClient.firstName ? { ...pkg, status: newStatus } : pkg
@@ -57,23 +65,28 @@ const TableThree = () => {
     }
   };
 
-  const fetchReclamations =async() =>{
-    try{
+  const fetchReclamations = async () => {
+    try {
       const data = await getReclamations();
       console.log(data)
       setReclamations(data)
-      }catch(error){
+    } catch (error) {
 
-      }
+    }
   }
-   useEffect(() => {
+  useEffect(() => {
     fetchReclamations();
-   },[])
+  }, [])
 
-   const handleDeleteRow = (id: String) => {
-    const updatedReclamations = reclamations.filter(item => item.id !== id);    
-    setReclamations(updatedReclamations);
-   
+  const handleDeleteRow = async (id: string) => {
+    try {
+      const updatedReclamations = reclamations.filter(item => item.id !== id);
+      await DeleteReclamation(id)
+      alert('Deleted')
+      setReclamations(updatedReclamations);
+    } catch (error:any) {
+       console.error(error)
+    }
  };
 
 
@@ -98,7 +111,7 @@ const TableThree = () => {
             </tr>
           </thead>
           <tbody>
-            {reclamations.map((item:IReclamation) => (
+            {reclamations?.map((item: IReclamation) => (
               <tr key={item.id}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
@@ -113,20 +126,23 @@ const TableThree = () => {
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p
-                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
-                      item.status == "En attente"
+                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${item.status == Status.finish
                         ? "bg-success text-success"
-                        : item.status === "Refuser"
+                        : item.status == Status.close
                           ? "bg-danger text-danger"
                           : "bg-warning text-warning"
-                    }`}
+                      }`}
                   >
-                    {item.status}
+                    {item.status == Status.finish
+                      ? "Terminée"
+                      : item.status == Status.close
+                        ? "Refusé"
+                        : "En attente"}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
-                    <button className="show hover:text-primary"onClick={() => handleOpenModal(item)}>
+                    <button className="show hover:text-primary" onClick={() => handleOpenModal(item)}>
                       <svg
                         className="fill-current"
                         width="18"
