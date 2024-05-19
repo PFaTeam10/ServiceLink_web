@@ -192,7 +192,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 pathname === "/" && "text-white"
                               }`}
                             >
-                              Generale
+                              General
                             </Link>
                           </li>
                         </ul>
@@ -225,7 +225,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       fill=""
                     />
                   </svg>
-                  Reclamation
+                  Reports
                 </Link>
               </li>
               {/* <!-- Menu Item reports --> */}

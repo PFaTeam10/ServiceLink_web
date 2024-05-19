@@ -1,15 +1,17 @@
 "use client"
-import React, { useState } from 'react';
-import { Package } from "@/types/package";
+import React, { useEffect, useState } from 'react';
 import ShowModal from '../Modal/ShowModal';
+import { getReclamations } from '@/api/Reclamations/Services';
+
+interface Package {
+  name: string;
+  invoiceDate: string;
+  status: string;
+}
 
 
-const packageData: Package[] = [
-  {
-    name: "Free package",
-    invoiceDate: `Jan 13,2023`,
-    status: "En attente",
-  },
+let initialPackageData: Package[] = [
+  
   {
     name: "Standard Package",
     invoiceDate: `Jan 13,2023`,
@@ -19,27 +21,60 @@ const packageData: Package[] = [
     name: "Business Package",
     invoiceDate: `Jan 13,2023`,
     status: "Refuser",
+  },{
+    name: "Free package",
+    invoiceDate: `Jan 13,2023`,
+    status: "En attente",
   }
   
 ];
 
 const TableThree = () => {
    // État pour stocker les données du client sélectionné
+   const [packageData, setPackageData] = useState<Package[]>(initialPackageData);
    const [showModal, setShowModal] = useState(false); // État pour contrôler l'affichage du modal
    const [selectedClient, setSelectedClient] = useState<ClientData | null>(null);
- 
+   const [reclamations, setReclamations] = useState<IReclamation>([]);
+
    // Fonction pour ouvrir le modal avec les données du client sélectionné
    const handleOpenModal = (client: any) => {
      setSelectedClient(client); 
      setShowModal(true);
-   };
+   }; 
 
+   const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedClient(null);
+  };
 
+   const handleStatusChange = (newStatus: string) => {
+    if (selectedClient) {
+      const updatedPackageData = packageData.map((pkg) =>
+        pkg.name === selectedClient.firstName ? { ...pkg, status: newStatus } : pkg
+      );
+      setPackageData(updatedPackageData);
+      handleCloseModal();
+    }
+  };
 
-//    const handleDeleteRow = (index: number) => {
-//     const updatedPackageData = packageData.filter((_, i) => i !== index); // Créer un nouveau tableau en filtrant les éléments à conserver
-//     setPackageData(updatedPackageData); // Mettre à jour le state avec le nouveau tableau
-//  };
+  const fetchReclamations =async() =>{
+    try{
+      const data = await getReclamations();
+      console.log(data)
+      setReclamations(data)
+      }catch(error){
+
+      }
+  }
+   useEffect(() => {
+    fetchReclamations();
+   },[])
+
+   const handleDeleteRow = (id: String) => {
+    const updatedReclamations = reclamations.filter(item => item.id !== id);    
+    setReclamations(updatedReclamations);
+   
+ };
 
 
   return (
@@ -49,10 +84,10 @@ const TableThree = () => {
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                Reclamation
+                Reports
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                La Date
+                Date
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                 Status
@@ -63,35 +98,35 @@ const TableThree = () => {
             </tr>
           </thead>
           <tbody>
-            {packageData.map((packageItem, key,index) => (
-              <tr key={key}>
+            {reclamations.map((item:IReclamation) => (
+              <tr key={item.id}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {packageItem.name}
+                    {item.title}
                   </h5>
-                  <p className="text-sm">${packageItem.price}</p>
+                  <p className="text-sm">{item.title}</p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {packageItem.invoiceDate}
+                    "item.date"
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
-                      packageItem.status === "En attente"
+                      item.status == "En attente"
                         ? "bg-success text-success"
-                        : packageItem.status === "Refuser"
+                        : item.status === "Refuser"
                           ? "bg-danger text-danger"
                           : "bg-warning text-warning"
                     }`}
                   >
-                    {packageItem.status}
+                    {item.status}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
-                    <button className="show hover:text-primary"onClick={() => handleOpenModal(packageItem)}>
+                    <button className="show hover:text-primary"onClick={() => handleOpenModal(item)}>
                       <svg
                         className="fill-current"
                         width="18"
@@ -110,7 +145,7 @@ const TableThree = () => {
                         />
                       </svg>
                     </button>
-                    <button className="hover:text-primary" onClick={() => handleDeleteRow(index)}>
+                    <button className="hover:text-primary" onClick={() => handleDeleteRow(item.id)}>
                       <svg
                         className="fill-current"
                         width="18"
@@ -163,8 +198,8 @@ const TableThree = () => {
           </tbody>
         </table>
       </div>
-      {showModal && (
-        <ShowModal client={selectedClient} onClose={() => setShowModal(false)} />
+      {showModal && selectedClient && (
+        <ShowModal client={selectedClient} onClose={handleCloseModal} onStatusChange={handleStatusChange} />
       )}
     </div>
   );

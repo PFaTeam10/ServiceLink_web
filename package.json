@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "apexcharts": "^3.45.2",
+    "axios": "^1.6.8",
     "flatpickr": "^4.6.13",
     "jsvectormap": "^1.5.3",
     "next": "^14.2.3",
     "react": "^18",
     "react-apexcharts": "^1.4.1",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "universal-cookie": "^7.1.4"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -29,5 +31,10 @@
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  }
+  },
+  "description": "The creation of a collaborative platform for citizens is an initiative aimed at strengthening civic participation, fostering the exchange of ideas, and facilitating cooperation between citizens and local authorities. This description highlights the convergence of computer science and artificial intelligence (AI) to develop an innovative platform centered around the community's needs.",
+  "main": "postcss.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
