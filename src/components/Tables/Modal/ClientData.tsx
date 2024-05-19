@@ -5,4 +5,5 @@ interface ClientData {
     phone: string;
     image: string;
     complaint: string;
+    status: string;
   }

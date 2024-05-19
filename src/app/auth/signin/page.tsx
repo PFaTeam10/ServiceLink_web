@@ -1,19 +1,45 @@
-import React from "react";
+'use client'
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { Metadata } from "next";
+// import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-
-export const metadata: Metadata = {
-  title: "Next.js SignIn Page | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Signin Page TailAdmin Dashboard Template",
-};
+import { SigninServiceProvider } from "@/api/ServiceProvider/Services";
+import { useRouter } from "next/navigation";
+// export const metadata: Metadata = {
+//   title: "Next.js SignIn Page | TailAdmin - Next.js Dashboard Template",
+//   description: "This is Next.js Signin Page TailAdmin Dashboard Template",
+// };
 
 const SignIn: React.FC = () => {
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const router = useRouter();
+
+  const handleLoginButton = async (event) => {event.preventDefault()
+    try {
+      if (email && password) {
+        const data =
+        {
+          email: email,
+          password: password
+        }
+        const response = await SigninServiceProvider(data)
+        if(response.status==200){
+          router.push("/")
+
+        }
+      }
+    } catch (error: any) {
+      setMessage(error.response.data.message)
+    }
+  }
   return (
-    <DefaultLayout>
-      <Breadcrumb pageName="Sign In" />
+    <>
+
 
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
@@ -173,13 +199,15 @@ const SignIn: React.FC = () => {
                 Sign In to TailAdmin
               </h2>
 
-              <form>
+              <form onSubmit={handleLoginButton}>
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email
                   </label>
                   <div className="relative">
                     <input
+                      value={email}
+                      onChange={(event) => { setEmail(event.target.value) }}
                       type="email"
                       placeholder="Enter your email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
@@ -211,9 +239,11 @@ const SignIn: React.FC = () => {
                   </label>
                   <div className="relative">
                     <input
+                      value={password}
+                      onChange={(event) => { setPassword(event.target.value) }}
                       type="password"
                       placeholder="6+ Characters, 1 Capital letter"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-white outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-gray-600 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
 
                     <span className="absolute right-4 top-4">
@@ -298,7 +328,8 @@ const SignIn: React.FC = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </>
+
   );
 };
 
