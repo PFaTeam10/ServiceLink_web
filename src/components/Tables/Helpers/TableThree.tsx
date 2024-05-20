@@ -89,6 +89,16 @@ const TableThree = () => {
     }
  };
 
+ const FormatDate = (dateString:any) => {
+  const date = new Date(dateString);
+
+  // Formate la date en utilisant toLocaleDateString
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formattedDate = date.toLocaleDateString('en-US', options);
+
+  return formattedDate;
+}
+
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -121,7 +131,7 @@ const TableThree = () => {
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    "item.date"
+                    {FormatDate(item.date)}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

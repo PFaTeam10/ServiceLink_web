@@ -33,7 +33,8 @@ interface IServiceProvider {
     localization: string;
     priority: string;
     serviceProvider: Object;
-    status:Status
+    status: number;
+    date?: string;
   }
   
   
