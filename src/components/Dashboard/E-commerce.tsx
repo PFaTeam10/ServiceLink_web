@@ -7,12 +7,28 @@ import ChatCard from "../Chat/ChatCard";
 import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
 import MapOne from "../Maps/MapOne";
+import { useDataFetching } from "../Utils/util";
+import { getReclamations } from "@/api/Reclamations/Services";
 
 const ECommerce: React.FC = () => {
+  const {data} = useDataFetching<IReclamation[]>(getReclamations)
+  
+  enum Status {
+    close = 0,
+    pending = 1,
+    finish = 2
+  }
+
+  
+  if(!data) return <>Loading...</>
+
+  const pendingData = data.filter((item) => item.status === Status.pending);
+  const finishData = data.filter((item) => item.status === Status.finish);
+  const closeData = data.filter((item) => item.status === Status.close);
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        <CardDataStats title="Totale des réclamations" total="1,451" rate="">
+        <CardDataStats title="Totale des réclamations" total={data.length.toString()} rate="">
           <svg
             className="fill-primary dark:fill-white"
             width="22"
@@ -31,7 +47,7 @@ const ECommerce: React.FC = () => {
             />
           </svg>
         </CardDataStats>
-        <CardDataStats title="Réclamation en attente" total="200" rate="">
+        <CardDataStats title="Réclamation en attente" total={pendingData.length.toString()} rate="">
           <svg
             className="fill-primary dark:fill-white"
             width="20"
@@ -54,7 +70,7 @@ const ECommerce: React.FC = () => {
             />
           </svg>
         </CardDataStats>
-        <CardDataStats title="Réclamations terminé" total="120" rate="">
+        <CardDataStats title="Réclamations terminé" total={finishData.length.toString()} rate="">
           <svg
             className="fill-primary dark:fill-white"
             width="22"
@@ -101,12 +117,6 @@ const ECommerce: React.FC = () => {
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <ChartOne />
         <ChartTwo />
-        <ChartThree />
-        <MapOne />
-        <div className="col-span-12 xl:col-span-8">
-          <TableOne />
-        </div>
-        <ChatCard />
       </div>
     </>
   );
