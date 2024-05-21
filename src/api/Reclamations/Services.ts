@@ -41,13 +41,14 @@ export async function getReclamations(): Promise<any> {
 }
 export async function updateReclamation(data:IReclamation): Promise<any> {
     try {
-        // const cookie_ = cookie.get('token-cookie') 
+        const cookie_ = cookie.get('token-cookie') 
         const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/${data.id}`
 
         console.log(url)
+        console.log(data)
         const response = await axios.put(url,data,{
             headers: {
-                'Authorization': "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MTYxNDE0NjgsImV4cCI6MTcxODczMzQ2OH0.v6wgJtXfpNNdkbtcp4aEZHZoYjUYH-DxJ-qxZTRPitwteyG9gtUnVDFBu59ng8XZiaV_wneL3Eu4zFBM2Btlhg"
+                'Authorization': cookie_
             }
             
         })
@@ -61,13 +62,31 @@ export async function updateReclamation(data:IReclamation): Promise<any> {
 
 export async function DeleteReclamation(id:string): Promise<any> {
     try {
-        // const cookie_ = cookie.get('token-cookie') 
+        const cookie_ = cookie.get('token-cookie') 
         const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/${id}`
 
         console.log(url)
         const response = await axios.delete(url,{
             headers: {
-                'Authorization': "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MTYxNDE0NjgsImV4cCI6MTcxODczMzQ2OH0.v6wgJtXfpNNdkbtcp4aEZHZoYjUYH-DxJ-qxZTRPitwteyG9gtUnVDFBu59ng8XZiaV_wneL3Eu4zFBM2Btlhg"
+                'Authorization': cookie_
+            }
+            
+        })
+        return response.data.data 
+ 
+    } catch (error) {
+        throw error;
+    }
+}
+export async function GetReclamationById(id:string): Promise<any> {
+    try {
+        const cookie_ = cookie.get('token-cookie') 
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/${id}`
+
+        console.log(url)
+        const response = await axios.delete(url,{
+            headers: {
+                'Authorization': cookie_
             }
             
         })

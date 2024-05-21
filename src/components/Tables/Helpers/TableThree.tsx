@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import ShowModal from '../Modal/ShowModal';
 import { DeleteReclamation, getReclamations } from '@/api/Reclamations/Services';
+import { Status } from '@/enum/enum';
 
 interface Package {
   name: string;
@@ -30,40 +31,35 @@ let initialPackageData: Package[] = [
 ];
 
 
-enum Status {
-  close = 0,
-  pending = 1,
-  finish = 2
-}
 
 
 const TableThree = () => {
   // État pour stocker les données du client sélectionné
   const [packageData, setPackageData] = useState<Package[]>(initialPackageData);
   const [showModal, setShowModal] = useState(false); // État pour contrôler l'affichage du modal
-  const [selectedClient, setSelectedClient] = useState<ClientData | null>(null);
+  const [selectedRec, setSelectedRec] = useState<IReclamation | null>(null);
   const [reclamations, setReclamations] = useState<IReclamation[]>([]);
 
   // Fonction pour ouvrir le modal avec les données du client sélectionné
-  const handleOpenModal = (client: any) => {
-    setSelectedClient(client);
+  const handleOpenModal = (client: IReclamation) => {
+    setSelectedRec(client);
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setSelectedClient(null);
+    setSelectedRec(null);
   };
 
-  const handleStatusChange = (newStatus: string) => {
-    if (selectedClient) {
-      const updatedPackageData = packageData.map((pkg) =>
-        pkg.name === selectedClient.firstName ? { ...pkg, status: newStatus } : pkg
-      );
-      setPackageData(updatedPackageData);
-      handleCloseModal();
-    }
-  };
+  // const handleStatusChange = (newStatus: string) => {
+  //   if (selectedClient) {
+  //     const updatedPackageData = packageData.map((pkg) =>
+  //       pkg.name === selectedClient.firstName ? { ...pkg, status: newStatus } : pkg
+  //     );
+  //     setPackageData(updatedPackageData);
+  //     handleCloseModal();
+  //   }
+  // };
 
   const fetchReclamations = async () => {
     try {
@@ -121,7 +117,7 @@ const TableThree = () => {
             </tr>
           </thead>
           <tbody>
-            {reclamations?.map((item: IReclamation) => (
+            {reclamations && reclamations.length > 0 ? reclamations?.map((item: IReclamation) => (
               <tr key={item.id}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
@@ -136,16 +132,16 @@ const TableThree = () => {
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p
-                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${item.status == Status.finish
+                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${item.status === Status.finish
                         ? "bg-success text-success"
                         : item.status == Status.close
                           ? "bg-danger text-danger"
                           : "bg-warning text-warning"
                       }`}
                   >
-                    {item.status == Status.finish
+                    {item.status === Status.finish
                       ? "Terminée"
-                      : item.status == Status.close
+                      : item.status === Status.close
                         ? "Refusé"
                         : "En attente"}
                   </p>
@@ -220,12 +216,12 @@ const TableThree = () => {
                   </div>
                 </td>
               </tr>
-            ))}
+            )) : <tr>No data available</tr>}
           </tbody>
         </table>
       </div>
-      {showModal && selectedClient && (
-        <ShowModal client={selectedClient} onClose={handleCloseModal} onStatusChange={handleStatusChange} />
+      {showModal && selectedRec && (
+        <ShowModal reclamation={selectedRec} onClose={handleCloseModal}   />
       )}
     </div>
   );
