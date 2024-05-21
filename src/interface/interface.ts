@@ -27,14 +27,15 @@ interface IServiceProvider {
     timestamp: Date;
   }
   interface IReclamation {
-    id:String;
+    id:string;
     title: string;
     description: string;
     localization: string;
     priority: string;
     serviceProvider: Object;
-    status: number;
+    status: Status;
     date?: string;
+    citizen?: ICitizen;
   }
   
   
