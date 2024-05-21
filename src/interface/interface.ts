@@ -1,3 +1,4 @@
+import { Status } from "@/enum/enum";
 
 interface IServiceProvider {
     id: string;
@@ -36,6 +37,7 @@ interface IServiceProvider {
     status: Status;
     date?: string;
     citizen?: ICitizen;
+    media?: []; 
   }
   
   
