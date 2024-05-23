@@ -13,7 +13,7 @@ import { IServiceProvider } from "@/interface/interface";
 const Profile = () => {
   const {data} = useDataFetching<IServiceProvider>(GetServiceProvidersDetails)
 
-  if(!data) return <>Loading...</>
+  if(!data) return <DefaultLayout>Loading...</DefaultLayout>
 
   return (
     <DefaultLayout>
