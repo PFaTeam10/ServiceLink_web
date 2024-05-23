@@ -17,6 +17,7 @@
     "react": "^18",
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18",
+    "react-toastify": "^10.0.5",
     "react-responsive-carousel": "^3.2.23",
     "universal-cookie": "^7.1.4"
   },

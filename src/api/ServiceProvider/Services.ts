@@ -1,8 +1,9 @@
-// import axios from 'axios';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Cookies from 'universal-cookie';
 
-// const root = 'api/serviceprovider';
-
+const root = 'api/serviceprovider';
+const cookie = new Cookies() 
 
 // export async function GetServiceProviders(): Promise<any> {
 //     try {
@@ -34,11 +35,7 @@
 //         throw error;
 //     }
 // }
-import axios from 'axios';
-import Cookies from 'universal-cookie';
 
-const root = 'api/serviceprovider';
-const cookie = new Cookies() 
 export async function SigninServiceProvider(data:any): Promise<any> {
      try {
         const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/signin`

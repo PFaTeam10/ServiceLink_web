@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import ShowModal from '../Modal/ShowModal';
 import { DeleteReclamation, getReclamations } from '@/api/Reclamations/Services';
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Status } from '@/enum/enum';
 
 interface Package {
@@ -13,9 +15,9 @@ interface Package {
 
 let initialPackageData: Package[] = [
 
-  {
+  { 
     name: "Standard Package",
-    invoiceDate: `Jan 13,2023`,
+    invoiceDate: `Jan 13,2023`, 
     status: "Termine",
   },
   {
@@ -74,16 +76,16 @@ const TableThree = () => {
     fetchReclamations();
   }, [])
 
-  const handleDeleteRow = async (id: string) => {
-    try {
-      const updatedReclamations = reclamations.filter(item => item.id !== id);
-      await DeleteReclamation(id)
-      alert('Deleted')
-      setReclamations(updatedReclamations);
-    } catch (error:any) {
-       console.error(error)
-    }
- };
+    const handleDeleteRow = async (id: string) => {
+      try {
+        const updatedReclamations = reclamations.filter(item => item.id !== id);
+        await DeleteReclamation(id)
+        toast.success('Reclamation deleted successfully');
+        setReclamations(updatedReclamations);
+      } catch (error:any) {
+        toast.error('Failed to delete reclamation');
+      }
+  };
 
  const FormatDate = (dateString:any) => {
   const date = new Date(dateString);
@@ -223,6 +225,7 @@ const TableThree = () => {
       {showModal && selectedRec && (
         <ShowModal reclamation={selectedRec} onClose={handleCloseModal}   />
       )}
+      <ToastContainer />
     </div>
   );
 };
