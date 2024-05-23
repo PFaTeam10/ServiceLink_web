@@ -30,8 +30,8 @@ const Modal: React.FC<ModalProps> = ({ reclamation, onClose }) => {
   }
   return (
     <>
-    <div className="modal-overlay fixed top-0 left-0 w-full h-full flex justify-center items-center bg-amber-300-900 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg p-8 max-w-lg w-full relative">
+    <div className="modal-overlay fixed top-0 left-0  w-full flex justify-center items-center bg-amber-300-900 bg-opacity-50 z-50">
+      <div className="bg-white  rounded-lg p-8 max-w-lg w-full relative">
         {reclamation.media && reclamation.media.length > 0 && (
           <Carousel className="mb-4" showThumbs={false} infiniteLoop useKeyboardArrows autoPlay>
             {reclamation.media.map((uri: any, index: number) => (

@@ -15,9 +15,9 @@ interface Package {
 
 let initialPackageData: Package[] = [
 
-  {
+  { 
     name: "Standard Package",
-    invoiceDate: `Jan 13,2023`,
+    invoiceDate: `Jan 13,2023`, 
     status: "Termine",
   },
   {
