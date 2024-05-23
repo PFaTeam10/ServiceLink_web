@@ -23,10 +23,10 @@ const cookie = new Cookies()
 //     }
 // }
 
-export async function getReclamations(): Promise<any> {
+export async function getReclamationsAccepted(): Promise<any> {
     try {
         const cookie_ = cookie.get('token-cookie') 
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/serviceprovider`
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/serviceprovider/accepted`
 
         const response = await axios.get(url, {
             headers: {
@@ -40,6 +40,26 @@ export async function getReclamations(): Promise<any> {
         throw error;
     }
 }
+
+export async function getReclamationsIgnored(): Promise<any> {
+    try {
+        const cookie_ = cookie.get('token-cookie') 
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/serviceprovider/ignored`
+
+        const response = await axios.get(url, {
+            headers: {
+                'Authorization': cookie_
+            }
+            
+        })
+        return response.data.data 
+ 
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 export async function updateReclamation(data:IReclamation): Promise<any> {
     try {
         const cookie_ = cookie.get('token-cookie') 

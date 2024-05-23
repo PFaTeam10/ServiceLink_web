@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import ShowModal from '../Modal/ShowModal';
-import { DeleteReclamation, getReclamations } from '@/api/Reclamations/Services';
+import { DeleteReclamation, getReclamationsAccepted } from '@/api/Reclamations/Services';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Status } from '@/enum/enum';
@@ -11,7 +11,7 @@ import { useDataFetching } from '@/components/Utils/util';
 const TableThree = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedRec, setSelectedRec] = useState<IReclamation | null>(null);
-  const { data: DataReclamation, error , setData } = useDataFetching<IReclamation[]>(getReclamations);
+  const { data: DataReclamation, error , setData } = useDataFetching<IReclamation[]>(getReclamationsAccepted);
 
   const handleOpenModal = (reclamation: IReclamation) => {
     setSelectedRec(reclamation);
@@ -85,14 +85,14 @@ const TableThree = () => {
                           ? "bg-success text-success"
                           : item.status === Status.close
                           ? "bg-danger text-danger"
-                          : "bg-warning text-warning"
+                          : item.status === Status.pending &&  "bg-warning text-warning"
                       }`}
                     >
                       {item.status === Status.finish
                         ? "Terminée"
                         : item.status === Status.close
                         ? "Refusé"
-                        : "En attente"}
+                        : item.status === Status.pending && "En attente"}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
