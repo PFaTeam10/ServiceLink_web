@@ -5,6 +5,7 @@ import './ShowModal.css';
 import { updateReclamation } from '@/api/Reclamations/Services';
 import { Status } from '@/enum/enum';
 import { toast,ToastContainer  } from 'react-toastify';
+import { IReclamation } from '@/interface/interface';
 
 
 interface ModalProps {
@@ -13,6 +14,7 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ reclamation, onClose }) => {
+  console.log(reclamation)
   if (!reclamation.citizen) return <>Loading...</>;
 
   const [status, setStatus] = useState(reclamation.status);

@@ -5,10 +5,12 @@ import ChartTwo from "../Charts/ChartTwo";
 import CardDataStats from "../CardDataStats";
 import { useDataFetching } from "../Utils/util";
 import { getReclamations } from "@/api/Reclamations/Services";
+import { IReclamation } from "@/interface/interface";
+import { GetAllCitizens } from "@/api/Citizen/Services";
 
 const ECommerce: React.FC = () => {
   const {data} = useDataFetching<IReclamation[]>(getReclamations)
-  
+  const {data:citizens} = useDataFetching(GetAllCitizens)
   enum Status {
     close = 0,
     pending = 1,
@@ -16,7 +18,7 @@ const ECommerce: React.FC = () => {
   }
 
   
-  if(!data) return <>Loading...</>
+  if(!data || !citizens ) return <>Loading...</>
 
   const pendingData = data.filter((item) => item.status === Status.pending);
   const finishData = data.filter((item) => item.status === Status.finish);
@@ -85,7 +87,7 @@ const ECommerce: React.FC = () => {
             />
           </svg>
         </CardDataStats>
-        <CardDataStats title="Total des utilisateurs" total="3.456" rate="">
+        <CardDataStats title="Total des utilisateurs" total={citizens.length.toString()} rate="">
           <svg
             className="fill-primary dark:fill-white"
             width="22"
