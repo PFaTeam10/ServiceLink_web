@@ -1,6 +1,6 @@
-import { Status } from "@/enum/enum";
+// import { Status } from "@/enum/enum";
 
-export interface IServiceProvider {
+ interface IServiceProvider {
     id: string;
     name: string;
     email: string;
@@ -9,7 +9,7 @@ export interface IServiceProvider {
     description?: string;
     image?: string;
   }
-   export interface ICitizen {
+    interface ICitizen {
     id:String;
     firstName: string;
     lastName: string;
@@ -22,23 +22,23 @@ export interface IServiceProvider {
     city: string;
 }
  
-  export interface IMessage{
+   interface IMessage{
     id:String;
     citizen: ICitizen;  
     serviceProvider: IServiceProvider;  
     message: string;
     timestamp: Date;
+    isCitizenSender:boolean;
   }
 
   
-  export interface IReclamation {
+   interface IReclamation {
     id:string;
     title: string;
     description: string;
     localization: string;
     priority: string;
-    serviceProvider: Object;
-    status: Status;
+    serviceProvider: Object; 
     date?: string;
     citizen?: ICitizen;
     media?: []; 
