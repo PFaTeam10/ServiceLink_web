@@ -74,8 +74,7 @@ export async function GetServiceProvidersDetails() {
             headers: {
                 'Authorization': cookie_
             }
-        });
-        console.log(response)
+        }); 
         return response.data.data
     } catch (error:any) {
         throw error
