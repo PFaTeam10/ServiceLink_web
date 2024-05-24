@@ -133,31 +133,36 @@ export default function Chat() {
     return (
      
       <DefaultLayout>
-    <div className={styles.container}> 
-      
-          {messages.map((item) => (
-          <RenderMessage key={item.id} item={item} />
-        ))}
-              
+       <div className={styles.container}> 
         
-      <div className={styles.messageInputContainer}>
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            className={styles.messageInput}
-            placeholder="Type a message..."
-          />
-          <button onClick={handleSendMessage} className={styles.sendButton}>
-            Send
-          </button>
-      </div>
-      </div>
+            {messages.map((item) => (
+            <RenderMessage key={item.id} item={item} />
+           ))}
+                
+          
+          
+        </div>
+
+        <div>
+        <div className={styles.messageInputContainer}>
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                className={styles.messageInput}
+                placeholder="Type a message..."
+              />
+              <button onClick={handleSendMessage} className={styles.sendButton}>
+                Send
+              </button>
+          </div>
+        </div>
     </DefaultLayout>
     );
+
 } 
 const styles = {
-  container: "flex flex-col h-full p-4   rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark", // Full height, white background, padding
+  container: "flex flex-col h-[70vh] overflow-scroll p-4   rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark", // Full height, white background, padding
   messageInputContainer: "flex flex-row space-x-2  px-4 py-2  bg-transparent mb-4", // Row, centered, light gray background, rounded corners, padding, margin
   messageInput: "rounded border-2 border-blue-400 flex-grow px-4 py-2 h-full bg-transparent",
   sendButton: "p-2 rounded bg-blue-400 text-white border-none cursor-pointer",  
