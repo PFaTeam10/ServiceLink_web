@@ -13,7 +13,7 @@ import { IServiceProvider } from "../interface";
 const Profile = () => {
   const {data} = useDataFetching<IServiceProvider>(GetServiceProvidersDetails)
 
-  if(!data) return <>Loading...</>
+  if(!data) return <DefaultLayout>Loading...</DefaultLayout>
 
   return (
     <DefaultLayout>
@@ -76,8 +76,8 @@ const Profile = () => {
               <div className="relative drop-shadow-2">
                 <Image
                   src={data.image ? data.image : ''}
-                  width={160}
-                  height={160}
+                  width={1600}
+                  height={1600}
                   style={{
                     width: "auto",
                     height: "auto",

@@ -1,29 +1,21 @@
-// 'use server'
-// import axios from 'axios';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// const root = 'api/citizen';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Cookies from 'universal-cookie';
+const cookie = new Cookies() 
+const root = 'api/citizen';
 
-// export async function SigninUser(data: any): Promise<any> {
-//     try {
-//         const url = `http://localhost:8080/${root}/signin`;
-//         console.log(url)
-//         const response = await axios.post(url, data);
-//         console.log("token : " , response.data.data)
-//         // Store the token in AsyncStorage
-//         await AsyncStorage.setItem('token', response.data.data);
-
-//         return response;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
-
-// export async function SignupUser(data: any): Promise<any> {
-//     try {
-//         const url = `http://localhost:8080/${root}/signup`;
-//         const response = await axios.post(url, data);
-//         return response;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
+export async function GetAllCitizens() {
+    try {
+        const cookie_ = cookie.get('token-cookie');
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/all`
+        const response = await axios.get(url,{
+            headers: {
+                'Authorization': cookie_
+            }
+        });
+        console.log(response)
+        return response.data.data
+    } catch (error:any) {
+        throw error
+    }
+}

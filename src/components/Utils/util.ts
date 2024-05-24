@@ -4,6 +4,7 @@ interface DataFetchingResult<T> {
   data: T | null;
   loading: boolean;
   error: Error | null;
+  setData: React.Dispatch<React.SetStateAction<T | null>>;
 }
 
 export const useDataFetching = <T>(fetchDataFunction: () => Promise<T>): DataFetchingResult<T> => {
@@ -39,7 +40,7 @@ export const useDataFetching = <T>(fetchDataFunction: () => Promise<T>): DataFet
     };
   }, [fetchDataFunction]);
 
-  return { data, loading, error };
+  return { data, loading, error , setData };
 };
 
 
