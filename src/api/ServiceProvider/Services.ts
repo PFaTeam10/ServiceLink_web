@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Cookies from 'universal-cookie';
-
+import jwt from 'jsonwebtoken';
 const root = 'api/serviceprovider';
 const cookie = new Cookies() 
 
@@ -90,3 +90,14 @@ export function LogoutServiceProvider(){
         throw error
     }
 }
+
+export function getIDService(){
+    const cookie_ = cookie.get('token-cookie');
+  
+      const decoded = jwt.decode(cookie_);
+      console.log("decoded",decoded.sub)
+      const userId = decoded.sub;   
+      return userId
+      // Use the userId for further actions
+    
+    }

@@ -42,6 +42,9 @@
     date?: string;
     citizen?: ICitizen;
     media?: []; 
+    status:{
+      
+    }
   }
   
   

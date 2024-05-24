@@ -8,21 +8,20 @@
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client'; 
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
-import { GetServiceProvidersDetails } from '@/api/ServiceProvider/Services';
-import { useDataFetching } from '@/components/Utils/util';
-
+import { GetServiceProvidersDetails, getIDService } from '@/api/ServiceProvider/Services';
+ 
  
 function formatDate(date: string): string {
   return date.split('T')[0];  
 }
 
 var client:any =null;
-const id="664a349482c378318bdf38a4"
-
+ 
 export default function Chat() {
 
   const [newMessage, setNewMessage] = useState<string>();
-  
+  const [idService, setIDService] = useState<string|null>(null);
+
    const [messages, setMessages] = useState<IMessage[]>([]); 
 
  
@@ -42,12 +41,12 @@ export default function Chat() {
     
   
     const onConnected = () => {
-      console.log('onConnected',id);
+      console.log('onConnected',idService);
      
         client?.subscribe('/chatroom/public', onMessageReceived); 
         client.publish({
           destination: '/app/join',
-          body:id, // Replace with the actual service provider ID
+          body:idService, // Replace with the actual service provider ID
         });
      
      
@@ -56,28 +55,28 @@ export default function Chat() {
       console.log('connect');
       client = new Client({
         webSocketFactory: () => new SockJS(`${process.env.NEXT_PUBLIC_BACKEND_URL}/ws`),
-        // reconnectDelay: 5000,
-        // heartbeatIncoming: 4000,
-        // heartbeatOutgoing: 4000,
+        reconnectDelay: 5000,
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
       });
 
       client.onConnect = onConnected;
-      client.activate();
-       
+      client.activate(); 
    
-    };
-    
- 
+    }; 
   
     useEffect(() => {
-    
-        connect(); 
-        console.log("connect") 
-  
-      return () => {
-        client?.deactivate();
-      };
-    }, []);
+        if(idService==null){
+          const id =getIDService();
+          setIDService(id)
+          
+          console.log("connect") 
+        }else{
+          connect(); 
+        }
+     
+   
+    }, [idService]);
 
  
     const handleSendMessage = () => { 
@@ -90,7 +89,7 @@ export default function Chat() {
           },
           citizenSender:false,
           serviceProvider: {
-            id: id
+            id: idService
           },
           timestamp:new Date(),
           message: newMessage,
@@ -103,10 +102,7 @@ export default function Chat() {
           });
         
         setNewMessage('');  
-      }else{
-        connect(); 
-        handleSendMessage()
-      }
+      } 
     };
  
  
@@ -134,12 +130,14 @@ export default function Chat() {
      
       <DefaultLayout>
     <div className={styles.container}> 
-      
-          {messages.map((item) => (
+      <div className='flex flex-col max-h- overflow-y-auto'>
+      {messages.map((item) => (
           <RenderMessage key={item.id} item={item} />
         ))}
               
+      </div>
         
+
       <div className={styles.messageInputContainer}>
           <input
             type="text"
