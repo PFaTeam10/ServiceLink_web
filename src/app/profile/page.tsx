@@ -6,7 +6,7 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Link from "next/link";
 import { useDataFetching } from "@/components/Utils/util";
 import { GetServiceProvidersDetails } from "@/api/ServiceProvider/Services";
-import { IServiceProvider } from "@/interface/interface";
+import { IServiceProvider } from "../interface";
 
 
 
