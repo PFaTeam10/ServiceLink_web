@@ -8,6 +8,8 @@
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client'; 
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
+import { GetServiceProvidersDetails } from '@/api/ServiceProvider/Services';
+import { useDataFetching } from '@/components/Utils/util';
 
  
 function formatDate(date: string): string {
@@ -15,9 +17,9 @@ function formatDate(date: string): string {
 }
 
 var client:any =null;
+const id="664a349482c378318bdf38a4"
+
 export default function Chat() {
-  const [IDCitizen, setIDCitizen] = useState<string>(null);
-  
 
   const [newMessage, setNewMessage] = useState<string>();
   
@@ -40,20 +42,23 @@ export default function Chat() {
     
   
     const onConnected = () => {
-      console.log('onConnected'); 
-      client?.subscribe('/chatroom/public', onMessageReceived); 
-      client.publish({
-        destination: '/app/join',
-        body:'663b073ccbe2ad2e7a73a861', // Replace with the actual service provider ID
-      });
+      console.log('onConnected',id);
+     
+        client?.subscribe('/chatroom/public', onMessageReceived); 
+        client.publish({
+          destination: '/app/join',
+          body:id, // Replace with the actual service provider ID
+        });
+     
+     
     };
     const connect = () => {
       console.log('connect');
       client = new Client({
         webSocketFactory: () => new SockJS(`${process.env.NEXT_PUBLIC_BACKEND_URL}/ws`),
-        reconnectDelay: 5000,
-        heartbeatIncoming: 4000,
-        heartbeatOutgoing: 4000,
+        // reconnectDelay: 5000,
+        // heartbeatIncoming: 4000,
+        // heartbeatOutgoing: 4000,
       });
 
       client.onConnect = onConnected;
@@ -62,37 +67,30 @@ export default function Chat() {
    
     };
     
-    const GetID= async () => {
-    
-      setIDCitizen("663aff7fb5b3a47fa04fb258");
-    };
+ 
   
     useEffect(() => {
-      if(client==null){
-        connect();
-        GetID();
-        console.log("connect")
-      }else{
-        console.log("client")
-      }
-   
+    
+        connect(); 
+        console.log("connect") 
   
       return () => {
         client?.deactivate();
       };
-    }, [client]);
+    }, []);
 
-    useEffect(() => {    
-      console.log("messages",messages);
+ 
+    const handleSendMessage = () => { 
+      console.log("client : ",client)
+      if(client){
 
-  }, [messages]);
-    const handleSendMessage = () => {
+        const chatMessage = {   
+          citizen:{
 
-        const chatMessage = {  
-         
-          isCitizenSender:false,
+          },
+          citizenSender:false,
           serviceProvider: {
-            id: "663b073ccbe2ad2e7a73a861"
+            id: id
           },
           timestamp:new Date(),
           message: newMessage,
@@ -103,46 +101,29 @@ export default function Chat() {
             destination: '/app/message',
             body: JSON.stringify(chatMessage),
           });
-       
-       
-        setNewMessage(''); 
-    
+        
+        setNewMessage('');  
+      }else{
+        connect(); 
+        handleSendMessage()
+      }
     };
  
-    const render = (item: IMessage) => {
-      console.log("item", item);
-      return (
-        <>
-        
-          {item.CitizenSender? (
-            <div>
-            <label>{item.citizen?.username}</label>
-            <label>{item.message}</label>
-            <label>{formatDate(item.timestamp)}</label>
-          </div>
-          ) : (
-            <div> 
-              <label>{item.message}</label>
-              <label>{formatDate(item.timestamp)}</label>
-            </div>
-          )}
-        </>
-      );
-    };
+ 
     const RenderMessage: React.FC<{ item: IMessage }>  = ({ item }:{item:IMessage}) => {
-     console.log(item)
+    
       return (
         <>
-         { item.isCitizenSender ? ( 
-              <div className="self-start bg-blue-100 p-4 rounded-lg mr-4 my-2 max-w-xs">
-                <p className="font-bold mr-2">{item.citizen?.username}</p>
-                <p>{item.message}</p>
-                <p className="text-gray-500 text-sm">{formatDate(item.timestamp)}</p>
+         { item.citizenSender ? ( 
+              <div className="self-start bg-blue-100 dark:bg-blue-600 p-4 rounded-lg mr-4 my-2 max-w-xs">
+                <p className="text-dark font-bold mr-2 dark:text-white">{item.citizen?.username}</p>
+                <p className='text-gray-500 dark:text-white'>{item.message}</p>
+                <p className="text-gray-500  dark:text-white text-xs">{formatDate(item.timestamp)}</p>
               </div>
             ) : (
-              <div className="self-end bg-gray-200 p-4 rounded-lg my-2 max-w-xs"> 
-                <p>{item.message}</p>
-                <p className="text-gray-500 text-sm">{formatDate(item.timestamp)}</p>
+              <div className="self-end bg-cyan-100 dark:bg-cyan-600  p-4 rounded-lg my-2 max-w-xs"> 
+                <p className='text-gray-500 dark:text-white'>{item.message}</p>
+                <p className="text-gray-500  dark:text-white  text-xs">{formatDate(item.timestamp)}</p>
               </div>
             )
            }
@@ -152,54 +133,45 @@ export default function Chat() {
     return (
      
       <DefaultLayout>
-      <div className="flex flex-col  h-screen">
-        <div className="flex-1 overflow-y-auto ">
+    <div className={styles.container}> 
+      
           {messages.map((item) => (
           <RenderMessage key={item.id} item={item} />
         ))}
-          {/* {messages.map((item) => (
-            <div key={item.id} className={`mb-4 ${item.isCitizenSender? 'self-end' : 'self-start'}`}>
-              <div className={`p-2 rounded ${item.isCitizenSender ? 'bg-green-200' : 'bg-gray-200'}`}>
-                {
-                  item.isCitizenSender
-                  ?
-                  <p className="font-bold">{item.citizen.username}</p> 
-                  :
-                  <p className="font-bold">{item.serviceProvider.name}</p>
-
-                }
-                <p>{item.message}</p>
-                <p className="text-xs">{formatDate(item.timestamp)}</p>
-              </div>
-            </div>
-          ))} */}
-        </div>
-        <div className="flex  items-center p-4">
+              
+        
+      <div className={styles.messageInputContainer}>
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            className="flex-1 mr-4 p-2 rounded border border-gray-300"
+            className={styles.messageInput}
             placeholder="Type a message..."
           />
-          <button onClick={handleSendMessage} className="p-2 rounded bg-blue-500 text-white border-none cursor-pointer">
+          <button onClick={handleSendMessage} className={styles.sendButton}>
             Send
           </button>
-        </div>
+      </div>
       </div>
     </DefaultLayout>
     );
 } 
-  
 const styles = {
-  messageInputContainer: "flex-row border-2 border-gray-300 items-center bg-gray-100 rounded-2xl px-4 py-2 mx-4 mb-4",
-  messageInput: "flex-1 text-base px-4 h-full border-0 focus:outline-none",
-  sendButton: "ml-4 p-2 rounded-full",
-  name: "text-lg font-bold mr-4",
-  date: "self-end text-gray-500 text-sm",
-  messageContent: "bg-gray-100 p-4 rounded-lg",
-  messageText: "text-base",
-  container: "flex-1 bg-white pt-4",
-  ownMessageContainer: "self-end bg-blue-100 p-4 rounded-lg mr-4 my-2 max-w-xs",
-  otherMessageContainer: "bg-gray-200 p-4 rounded-lg my-2 max-w-xs",
+  container: "flex flex-col h-full p-4   rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark", // Full height, white background, padding
+  messageInputContainer: "flex flex-row space-x-2  px-4 py-2  bg-transparent mb-4", // Row, centered, light gray background, rounded corners, padding, margin
+  messageInput: "rounded border-2 border-blue-400 flex-grow px-4 py-2 h-full bg-transparent",
+  sendButton: "p-2 rounded bg-blue-400 text-white border-none cursor-pointer",  
+  // ... other styles remain the same ...
 };
+// const styles = {
+//   messageInputContainer: "flex-row border-2 border-gray-300 items-center bg-gray-100 rounded-2xl px-4 py-2 mx-4 mb-4",
+//   messageInput: "flex-1 text-base px-4 h-full border-0 focus:outline-none",
+//   sendButton: "ml-4 p-2 rounded-full",
+//   name: "text-lg font-bold mr-4",
+//   date: "self-end text-gray-500 text-sm",
+//   messageContent: "bg-gray-100 p-4 rounded-lg",
+//   messageText: "text-base",
+//   container: "flex-1 bg-white pt-4",
+//   ownMessageContainer: "self-end bg-blue-100 p-4 rounded-lg mr-4 my-2 max-w-xs",
+//   otherMessageContainer: "bg-gray-200 p-4 rounded-lg my-2 max-w-xs",
+// };

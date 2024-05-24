@@ -28,7 +28,7 @@
     serviceProvider: IServiceProvider;  
     message: string;
     timestamp: Date;
-    isCitizenSender:boolean;
+    citizenSender:boolean;
   }
 
   
