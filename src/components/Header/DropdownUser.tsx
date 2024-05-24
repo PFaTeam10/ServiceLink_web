@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useDataFetching } from "../Utils/util";
-import { GetServiceProvidersDetails } from "@/api/ServiceProvider/Services";
+import { GetServiceProvidersDetails, LogoutServiceProvider } from "@/api/ServiceProvider/Services";
 import {  IServiceProvider } from "../../app/interface";
 
 const DropdownUser = () => {
@@ -44,6 +44,14 @@ const DropdownUser = () => {
 
   if(!data) return <></>
 
+  const handleLogout = () => {
+     try {
+         LogoutServiceProvider()
+     } catch(error:any) {
+       console.log(error)
+     }
+  }
+
   return (
     <div className="relative">
       <Link
@@ -63,7 +71,7 @@ const DropdownUser = () => {
           <Image
             width={112}
             height={112}
-            src={"/images/user/user-01.png"}
+            src={data.image ? data.image : "/images/user/user-01.png"}
             style={{
               width: "auto",
               height: "auto",
@@ -171,7 +179,7 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button onClick={handleLogout} className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
           <svg
             className="fill-current"
             width="22"

@@ -14,7 +14,7 @@ interface ModalProps {
 const RecIgnored: React.FC<ModalProps> = ({ setClose }) => {
   const { data } = useDataFetching(getReclamationsIgnored);
 
-  if (!data) return <>Loading...</>;
+  if (!data) return <></>;
 
   const handleAccept = async(item:IReclamation) => {
     try {

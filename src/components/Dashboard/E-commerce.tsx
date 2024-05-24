@@ -4,12 +4,12 @@ import ChartOne from "../Charts/ChartOne";
 import ChartTwo from "../Charts/ChartTwo";
 import CardDataStats from "../CardDataStats";
 import { useDataFetching } from "../Utils/util";
-import { getReclamations } from "@/api/Reclamations/Services";
 import { IReclamation } from "@/interface/interface";
 import { GetAllCitizens } from "@/api/Citizen/Services";
+import { getReclamationsAccepted } from "@/api/Reclamations/Services";
 
 const ECommerce: React.FC = () => {
-  const {data} = useDataFetching<IReclamation[]>(getReclamations)
+  const {data} = useDataFetching<IReclamation[]>(getReclamationsAccepted)
   const {data:citizens} = useDataFetching(GetAllCitizens)
   enum Status {
     close = 0,
