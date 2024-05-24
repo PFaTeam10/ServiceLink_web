@@ -4,9 +4,9 @@ import ChartOne from "../Charts/ChartOne";
 import ChartTwo from "../Charts/ChartTwo";
 import CardDataStats from "../CardDataStats";
 import { useDataFetching } from "../Utils/util";
-import { IReclamation } from "@/interface/interface";
 import { GetAllCitizens } from "@/api/Citizen/Services";
 import { getReclamationsAccepted } from "@/api/Reclamations/Services";
+import { IReclamation } from "@/app/interfaces/interface";
 
 const ECommerce: React.FC = () => {
   const {data} = useDataFetching<IReclamation[]>(getReclamationsAccepted)

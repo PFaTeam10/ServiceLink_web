@@ -32,16 +32,5 @@
   }
 
   
-   interface IReclamation {
-    id:string;
-    title: string;
-    description: string;
-    localization: string;
-    priority: string;
-    serviceProvider: Object; 
-    date?: string;
-    citizen?: ICitizen;
-    media?: []; 
-  }
-  
+
   
