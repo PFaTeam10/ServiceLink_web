@@ -80,3 +80,13 @@ export async function GetServiceProvidersDetails() {
         throw error
     }
 }
+
+export function LogoutServiceProvider(){
+    try {
+        const cookie_ = cookie.remove('token-cookie');
+        window.location.reload()
+        return "log out"
+    } catch (error:any) {
+        throw error
+    }
+}

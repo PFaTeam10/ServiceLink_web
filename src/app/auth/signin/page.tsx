@@ -7,10 +7,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { SigninServiceProvider } from "@/api/ServiceProvider/Services";
 import { useRouter } from "next/navigation";
-// export const metadata: Metadata = {
-//   title: "Next.js SignIn Page | TailAdmin - Next.js Dashboard Template",
-//   description: "This is Next.js Signin Page TailAdmin Dashboard Template",
-// };
+
 
 const SignIn: React.FC = () => {
   const [password, setPassword] = useState("");

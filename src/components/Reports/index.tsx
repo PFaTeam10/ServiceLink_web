@@ -14,7 +14,7 @@ const Calendar = () => {
   return (
     <div className="mx-auto max-w-7xl">
       <Breadcrumb pageName="Reports" />
-      <button onClick={() => setOpen(true)}>Look</button>
+      <button className="bg-blue-500 my-4 px-4 text-white " onClick={() => setOpen(true)}>Queue</button>
       {/* <!-- ====== Calendar Section Start ====== --> */}
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <TableThree/>
