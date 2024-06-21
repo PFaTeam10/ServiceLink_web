@@ -5,7 +5,7 @@ import { DeleteReclamation, getReclamationsAccepted } from '@/api/Reclamations/S
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Status } from '@/enum/enum';
-import { IReclamation } from '@/interface/interface';
+import { IReclamation } from '@/app/interfaces/interface';
 import { useDataFetching } from '@/components/Utils/util';
 
 const TableThree = () => {
@@ -24,12 +24,15 @@ const TableThree = () => {
   };
 
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
-  };
-
+  function formatDate(date: any): string {
+    if (date instanceof Date) {
+      return date.toISOString().split('T')[0];
+    } else if (typeof date === 'string') {
+      return new Date(date).toISOString().split('T')[0];
+    } else {
+      throw new Error('Invalid date format');
+    }
+  }
   if (error) return <div>Error loading data</div>;
   if (!DataReclamation) return <div>Loading...</div>;
 

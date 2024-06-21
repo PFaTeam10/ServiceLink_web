@@ -3,8 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useDataFetching } from "../Utils/util";
 import { GetServiceProvidersDetails, LogoutServiceProvider } from "@/api/ServiceProvider/Services";
-import {  IServiceProvider } from "../../app/interface";
-
+ 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const {data,error,loading} = useDataFetching<IServiceProvider>(GetServiceProvidersDetails)

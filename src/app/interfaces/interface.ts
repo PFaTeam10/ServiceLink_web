@@ -7,7 +7,7 @@ export interface IReclamation {
     localization: string;
     priority: string;
     serviceProvider: Object; 
-    date?: string;
+    date: Date;
     citizen?: ICitizen;
     media?: []; 
     status: Status

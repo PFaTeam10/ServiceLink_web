@@ -16,7 +16,8 @@ const SignIn: React.FC = () => {
 
   const router = useRouter();
 
-  const handleLoginButton = async (event) => {event.preventDefault()
+  const handleLoginButton = async (event:any) => {
+    event.preventDefault()
     try {
       if (email && password) {
         const data =
@@ -26,8 +27,7 @@ const SignIn: React.FC = () => {
         }
         const response = await SigninServiceProvider(data)
         if(response.status==200){
-          router.push("/")
-
+          router.push("/") 
         }
       }
     } catch (error: any) {

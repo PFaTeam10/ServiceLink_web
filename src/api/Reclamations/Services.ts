@@ -1,4 +1,6 @@
- import { IReclamation } from "../../app/interface";
+ 
+ 
+ import { IReclamation } from "@/app/interfaces/interface";
 import axios from "axios";
 
 import Cookies from 'universal-cookie';

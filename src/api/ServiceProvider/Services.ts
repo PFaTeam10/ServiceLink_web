@@ -1,8 +1,8 @@
+ 
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Cookies from 'universal-cookie';
-
-const root = 'api/serviceprovider';
+ import Cookies from 'universal-cookie';
+ import { jwtDecode } from 'jwt-decode' // import dependency
+ const root = 'api/serviceprovider';
 const cookie = new Cookies() 
 
 // export async function GetServiceProviders(): Promise<any> {
@@ -61,7 +61,7 @@ export async function SignupServiceProvider(data:any): Promise<any> {
     }
 }
 
-export function logoutServiceProvider() {
+export async function logoutServiceProvider() {
     const cookies = new Cookies();
     cookies.remove('token-cookie', { path: '/' });
 }
@@ -80,8 +80,20 @@ export async function GetServiceProvidersDetails() {
         throw error
     }
 }
+export  function GetServiceProviderID(){
+    try {
+        console.log("cookieValue") 
+        const cookieValue = cookie.get('token-cookie');  
+        return jwtDecode(cookieValue).sub
+    } catch (error:any) {
+        throw error
+    }
+}
 
-export function LogoutServiceProvider(){
+
+ 
+    
+export  function LogoutServiceProvider(){
     try {
         const cookie_ = cookie.remove('token-cookie');
         window.location.reload()

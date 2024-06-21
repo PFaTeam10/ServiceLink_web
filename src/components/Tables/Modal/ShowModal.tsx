@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // styles for the carousel
 import './ShowModal.css';
 import { updateReclamation } from '@/api/Reclamations/Services';
 import { Status } from '@/enum/enum';
 import { toast,ToastContainer  } from 'react-toastify';
-import { IReclamation } from '@/interface/interface';
+import { IReclamation } from '@/app/interfaces/interface';
+import Image from 'next/image';
 
 
 interface ModalProps {
@@ -14,11 +15,12 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ reclamation, onClose }) => {
-  console.log(reclamation)
+  const [status, setStatus] = useState<Number>(reclamation.status);
+
   if (!reclamation.citizen) return <>Loading...</>;
 
-  const [status, setStatus] = useState(reclamation.status);
-
+ 
+ 
   const handleChangeStatus = async (value:any) => {
         try {
           reclamation.status = parseInt(value);
@@ -37,8 +39,8 @@ const Modal: React.FC<ModalProps> = ({ reclamation, onClose }) => {
         {reclamation.media && reclamation.media.length > 0 && (
           <Carousel className="mb-4" showThumbs={false} infiniteLoop useKeyboardArrows autoPlay>
             {reclamation.media.map((uri: any, index: number) => (
-              <div key={index}>
-                <img className="carousel-image" src={uri} alt={`Media ${index + 1}`} />
+              <div key={index}> 
+                <Image className="carousel-image" src={uri} alt={`Media ${index + 1}`} />
               </div>
             ))}
           </Carousel>
@@ -55,7 +57,7 @@ const Modal: React.FC<ModalProps> = ({ reclamation, onClose }) => {
           <select
             id="status"
             name="status"
-            value={status}
+            value={status as number}
             onChange={(e) => handleChangeStatus(e.target.value)}
             className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
           >

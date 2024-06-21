@@ -80,7 +80,7 @@ export const useDataFetchingById = <T>(fetchDataFunction: (id:string) => Promise
     };
   }, [fetchDataFunction,id]);
 
-  return { data, loading, error };
+  return { data, loading, error,setData };
 };
 
 

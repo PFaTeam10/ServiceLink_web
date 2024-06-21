@@ -1,5 +1,4 @@
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Cookies from 'universal-cookie';
 const cookie = new Cookies() 
 const root = 'api/citizen';

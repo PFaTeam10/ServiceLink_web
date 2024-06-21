@@ -7,41 +7,53 @@
   
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client'; 
-import DefaultLayout from '@/components/Layouts/DefaultLayout';
-import { GetServiceProvidersDetails } from '@/api/ServiceProvider/Services';
-import { useDataFetching } from '@/components/Utils/util';
+import DefaultLayout from '@/components/Layouts/DefaultLayout'; 
+import { GetServiceProviderID } from '@/api/ServiceProvider/Services';
 
  
-function formatDate(date: string): string {
-  return date.split('T')[0];  
+function formatDate(date: any): string {
+  if (date instanceof Date) {
+    return date.toISOString().split('T')[0];
+  } else if (typeof date === 'string') {
+    return new Date(date).toISOString().split('T')[0];
+  } else {
+    throw new Error('Invalid date format');
+  }
 }
 
 var client:any =null;
-const id="664a349482c378318bdf38a4"
+ 
 
 export default function Chat() {
 
   const [newMessage, setNewMessage] = useState<string>();
   
    const [messages, setMessages] = useState<IMessage[]>([]); 
-
  
-    const onMessageReceived = (payload) => { 
-      const payloadData = JSON.parse(payload.body);
-      console.log("onMessageReceived : ",payloadData)
     
+   const onMessageReceived = (payload: any) => {
+    try {
+      const payloadData = JSON.parse(payload.body);
+      console.log("onMessageReceived : ", payloadData);
+  
       // Check if payload is valid and has the "MESSAGE" command
-      if (payloadData != null && payload.command === "MESSAGE") {
-        if(Array.isArray(payloadData)){
-          setMessages(payloadData);   
-        }else{
-          setMessages((prev:IMessage) => [...prev, payloadData]);  
+      if (payload.command === "MESSAGE") {
+        if (Array.isArray(payloadData)) {
+          setMessages((prevMessages: IMessage[]) => [...prevMessages, ...payloadData]);
+        } else if (typeof payloadData === "object" && payloadData !== null) {
+          setMessages((prevMessages: IMessage[]) => [...prevMessages, payloadData as IMessage]);
+        } else {
+          console.error("Invalid payload format: ", payloadData);
         }
-       }
-    }; 
+      }
+    } catch (error) {
+      console.error("Error parsing payload: ", error);
+    }
+  };
     
   
     const onConnected = () => {
+      const id = GetServiceProviderID()
       console.log('onConnected',id);
      
         client?.subscribe('/chatroom/public', onMessageReceived); 
@@ -70,7 +82,32 @@ export default function Chat() {
  
   
     useEffect(() => {
-    
+      const onConnected = () => {
+        const id= GetServiceProviderID()
+        console.log('onConnected',id);
+       
+          client?.subscribe('/chatroom/public', onMessageReceived); 
+          client.publish({
+            destination: '/app/join',
+            body:id, // Replace with the actual service provider ID
+          });
+       
+       
+      };
+      const connect = () => {
+        console.log('connect');
+        client = new Client({
+          webSocketFactory: () => new SockJS(`${process.env.NEXT_PUBLIC_BACKEND_URL}/ws`),
+          // reconnectDelay: 5000,
+          // heartbeatIncoming: 4000,
+          // heartbeatOutgoing: 4000,
+        });
+  
+        client.onConnect = onConnected;
+        client.activate();
+         
+     
+      };
         connect(); 
         console.log("connect") 
   
@@ -82,6 +119,7 @@ export default function Chat() {
  
     const handleSendMessage = () => { 
       console.log("client : ",client)
+      const id= GetServiceProviderID()
       if(client){
 
         const chatMessage = {   
@@ -135,8 +173,8 @@ export default function Chat() {
       <DefaultLayout>
        <div className={styles.container}> 
         
-            {messages.map((item) => (
-            <RenderMessage key={item.id} item={item} />
+            {messages.map((item,index) => (
+            <RenderMessage key={index} item={item} />
            ))}
                 
           

@@ -7,15 +7,12 @@ import { useDataFetching } from "../Utils/util";
 import { GetAllCitizens } from "@/api/Citizen/Services";
 import { getReclamationsAccepted } from "@/api/Reclamations/Services";
 import { IReclamation } from "@/app/interfaces/interface";
+import { Status } from '@/enum/enum';
 
 const ECommerce: React.FC = () => {
   const {data} = useDataFetching<IReclamation[]>(getReclamationsAccepted)
   const {data:citizens} = useDataFetching(GetAllCitizens)
-  enum Status {
-    close = 0,
-    pending = 1,
-    finish = 2
-  }
+ 
 
   
   if(!data || !citizens ) return <>Loading...</>
@@ -23,6 +20,7 @@ const ECommerce: React.FC = () => {
   const pendingData = data.filter((item) => item.status === Status.pending);
   const finishData = data.filter((item) => item.status === Status.finish);
   const closeData = data.filter((item) => item.status === Status.close);
+
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
