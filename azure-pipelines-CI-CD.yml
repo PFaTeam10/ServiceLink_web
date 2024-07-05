@@ -7,13 +7,15 @@ pool:
 
 
 stages:
-- stage: Setup
+- stage: Setup 
   jobs:
   - job: SetupJob
-    steps:
-    - script: npm install -g npm 
+    steps: 
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '20'
       displayName: 'Install Node.js'
-
+      
 - stage: Build
   dependsOn: Setup
   jobs:
