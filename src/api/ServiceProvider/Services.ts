@@ -63,7 +63,9 @@ export async function SignupServiceProvider(data:any): Promise<any> {
 
 export async function logoutServiceProvider() {
     const cookies = new Cookies();
+    
     cookies.remove('token-cookie', { path: '/' });
+    window.location.reload()
 }
 
 export async function GetServiceProvidersDetails() {
@@ -95,7 +97,8 @@ export  function GetServiceProviderID(){
     
 export  function LogoutServiceProvider(){
     try {
-        const cookie_ = cookie.remove('token-cookie');
+        const cookies = new Cookies();
+        cookies.remove('token-cookie', { path: '/' });
         window.location.reload()
         return "log out"
     } catch (error:any) {
