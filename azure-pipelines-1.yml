@@ -5,19 +5,14 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20'
-  displayName: 'Install Node.js'
+
 stages:
 - stage: Setup
   jobs:
   - job: SetupJob
     steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '20'
-        displayName: 'Install Node.js'
+    - script: npm install -g npm 
+      displayName: 'Install Node.js'
 
 - stage: Build
   dependsOn: Setup
