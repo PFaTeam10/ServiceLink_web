@@ -1,0 +1,46 @@
+#plusiseurs phases (stages) dans un pipeline
+trigger:
+ - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20'
+  displayName: 'Install Node.js'
+stages:
+- stage: Setup
+  jobs:
+  - job: SetupJob
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '20'
+        displayName: 'Install Node.js'
+
+- stage: Build
+  dependsOn: Setup
+  jobs:
+  - job: BuildJob
+    steps:
+    - script: npm install
+      displayName: 'Exécution de la phase de construction'
+    - script: npm run build
+      displayName: 'run build'
+
+- stage: Test
+  dependsOn: Build
+  jobs:
+  - job: TestJob
+    steps:
+    - script: echo "Exécution des tests..."
+      displayName: 'Test step'
+
+- stage: Deploy
+  dependsOn: Test
+  jobs:
+  - job: DeployJob
+    steps:
+    - script: echo "Déploiement de l'application..."
+      displayName: 'Deploy step'
