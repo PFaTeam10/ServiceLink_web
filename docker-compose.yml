@@ -1,0 +1,28 @@
+version: '3.8'   
+
+services:
+  backend:
+    build: 
+      context: ../ServiceLink_Api
+    container_name: serviceLink_api
+    ports:
+      - 8000:8080
+    # environment:
+    #   SPRING_APPLICATION_NAME: Smart_city
+    #   SPRING_DATA_MONGODB_URI: mongodb+srv://portfolio_user:portfolio2024@cluster0.cnv54k9.mongodb.net/
+    #   SPRING_DATA_MONGODB_DATABASE: Smart_city
+    #   SPRING_DATA_MONGODB_AUTO_INDEX_CREATION: 'true'
+    #   JWT_SECRET: y5WKAp(ZdP9D7jE3
+    #   JWT_EXPIRATION: 2592000000 
+       
+  web:
+    build:
+      context: ./
+    container_name: serviceLink_web
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+
+  
+  
