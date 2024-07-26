@@ -1,107 +1,78 @@
- 
+"use server";
+
 import axios from 'axios';
- import Cookies from 'universal-cookie';
- import { jwtDecode } from 'jwt-decode' // import dependency
- const root = 'api/serviceprovider';
-const cookie = new Cookies() 
+import { jwtDecode } from 'jwt-decode'; 
+import { cookies } from "next/headers";
+import { NextResponse } from 'next/server';
 
-// export async function GetServiceProviders(): Promise<any> {
-//     try {
-//         const token = await AsyncStorage.getItem('token');
-//         const url = `http://localhost:8080/${root}/all`;
-//         const response = await axios.get(url,{
-//             headers: {
-//                 'Authorization': token
-//             }});
-//         console.log(response.data)
-//         return response.data.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
+const root = 'api/serviceprovider';
 
-
-// export async function GetServiceProviderById(id:string): Promise<any> {
-//     try {
-//         const token = await AsyncStorage.getItem('token');
-//         const url = `http://localhost:8080/${root}/${id}`;
-//         const response = await axios.get(url,{
-//             headers: {
-//                 'Authorization': token
-//             }});
-//         console.log(response.data)
-//         return response.data.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
-
-export async function SigninServiceProvider(data:any): Promise<any> {
-     try {
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/signin`
-        const response = await axios.post(url, data);
-        const cookies = new Cookies(response.data.data); 
-        cookies.set('token-cookie',response.data.data, {
-            path: '/'
-        })
-        console.log(cookies)
-        return response;   
-    } catch (error:any) {
-       throw error
-    }
-}
-
-export async function SignupServiceProvider(data:any): Promise<any> {
+export async function SigninServiceProvider(data: any): Promise<any> {
     try {
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/signup`
+        console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/signin`;
         const response = await axios.post(url, data);
-        return response
-    } catch (error:any) {
-        throw error
+ 
+        cookies().set("token-cookie",response.data.data,{
+            path: '/', 
+            maxAge: 3600,
+        })
+    
+        return response.data;  
+    } catch (error: any) {
+        throw error;
     }
 }
 
-export async function logoutServiceProvider() {
-    const cookies = new Cookies();
-    
-    cookies.remove('token-cookie', { path: '/' });
-    window.location.reload()
+export async function SignupServiceProvider(data: any): Promise<any> {
+    try {
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/signup`;
+        const response = await axios.post(url, data);
+        return response;
+    } catch (error: any) {
+        throw error;
+    }
 }
+
+ 
 
 export async function GetServiceProvidersDetails() {
     try {
-        const cookie_ = cookie.get('token-cookie');
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/`
-        const response = await axios.get(url,{
+        const token = cookies().get('token-cookie');
+        if(token!=undefined){
+        const cookie_ = token.value
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/`;
+   
+        const response = await axios.get(url, {
             headers: {
-                'Authorization': cookie_
+                'Authorization': `Bearer ${cookie_}`
             }
-        }); 
-        return response.data.data
-    } catch (error:any) {
-        throw error
-    }
-}
-export  function GetServiceProviderID(){
-    try {
-        console.log("cookieValue") 
-        const cookieValue = cookie.get('token-cookie');  
-        return jwtDecode(cookieValue).sub
-    } catch (error:any) {
-        throw error
+        });
+        return response.data.data;}
+    } catch (error: any) {
+        throw error;
     }
 }
 
-
- 
-    
-export  function LogoutServiceProvider(){
+export async function GetServiceProviderID() {
     try {
-        const cookies = new Cookies();
-        cookies.remove('token-cookie', { path: '/' });
-        window.location.reload()
-        return "log out"
-    } catch (error:any) {
-        throw error
+        const token = cookies().get('token-cookie'); 
+        if (token !== undefined) {
+            const decodedToken = jwtDecode(token.value).sub;
+            return decodedToken;
+        }
+    } catch (error: any) {
+        throw error;
+    }
+}
+
+export async function LogoutServiceProvider() {
+    try {
+      
+        cookies().delete('token-cookie');
+          
+    } catch (error: any) {
+        console.error("Logout error:", error);
+        throw error; // Rethrow the error for further handling
     }
 }

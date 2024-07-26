@@ -90,9 +90,7 @@ export default function Chat() {
           client.publish({
             destination: '/app/join',
             body:id, // Replace with the actual service provider ID
-          });
-       
-       
+          });  
       };
       const connect = () => {
         console.log('connect');

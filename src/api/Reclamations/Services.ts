@@ -1,61 +1,44 @@
- 
- 
+"use server" 
+
  import { IReclamation } from "@/app/interfaces/interface";
-import axios from "axios";
+import axios from "axios";  
+import { cookies } from "next/headers";
 
-import Cookies from 'universal-cookie';
-
-
-const root = "api/reclamation"
-const cookie = new Cookies() 
-
-// export async function AddReclamation(data:Reclamation): Promise<any> {
-//     try {
-//         const token = await AsyncStorage.getItem('token');
-//         console.log(data)
-//         const url = `http://localhost:8080/${root}/create`;
-//         const response = await axios.post(url,data,{
-//             headers: {
-//                 'Authorization': token
-//             }});
-//         console.log(response.data)
-//         return response.data.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// }
-
-export async function getReclamationsAccepted(): Promise<any> {
-    try {
-        const cookie_ = cookie.get('token-cookie') 
-        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/serviceprovider/accepted`
-
-        const response = await axios.get(url, {
-            headers: {
-                'Authorization': cookie_
-            }
-            
-        })
-        return response.data.data 
+const root = "api/reclamation"  
  
+export async function getReclamationsAccepted(): Promise<any> {
+    try { 
+        const token = cookies().get('token-cookie');
+        if(token!=undefined){
+            const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/serviceprovider/accepted`
+        
+            const cookie_ = token.value
+            const response = await axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${cookie_}`
+                }
+            }); 
+            return response.data.data 
+         } 
     } catch (error) {
         throw error;
     }
 }
 
 export async function getReclamationsIgnored(): Promise<any> {
-    try {
-        const cookie_ = cookie.get('token-cookie') 
+    try { 
+        const token = cookies().get('token-cookie');
+        if(token!=undefined){
         const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/serviceprovider/ignored`
-
-        const response = await axios.get(url, {
-            headers: {
-                'Authorization': cookie_
-            }
-            
-        })
-        return response.data.data 
  
+        const cookie_ = token.value
+         const response = await axios.get(url, {
+            headers: {
+                'Authorization': `Bearer ${cookie_}`
+            }
+        });
+        return response.data.data 
+        }
     } catch (error) {
         throw error;
     }
@@ -63,20 +46,22 @@ export async function getReclamationsIgnored(): Promise<any> {
 
 
 export async function updateReclamation(data:IReclamation): Promise<any> {
-    try {
-        const cookie_ = cookie.get('token-cookie') 
+    try { 
         const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/${data.id}`
 
         console.log(url)
-        console.log(data)
-        const response = await axios.put(url,data,{
+        console.log(data) 
+       
+        const token = cookies().get('token-cookie');
+        if(token!=undefined){
+        const cookie_ = token.value
+         const response = await axios.get(url, {
             headers: {
-                'Authorization': cookie_
+                'Authorization': `Bearer ${cookie_}`
             }
-            
-        })
+        });
         return response.data.data 
- 
+ }
     } catch (error) {
         throw error;
     }
@@ -84,37 +69,39 @@ export async function updateReclamation(data:IReclamation): Promise<any> {
 
 
 export async function DeleteReclamation(id:string): Promise<any> {
-    try {
-        const cookie_ = cookie.get('token-cookie') 
+    try { 
         const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/${id}`
 
-        console.log(url)
-        const response = await axios.delete(url,{
+        console.log(url) 
+        const token = cookies().get('token-cookie');
+        if(token!=undefined){
+        const cookie_ = token.value
+         const response = await axios.get(url, {
             headers: {
-                'Authorization': cookie_
+                'Authorization': `Bearer ${cookie_}`
             }
-            
-        })
+        });
         return response.data.data 
- 
+    } 
     } catch (error) {
         throw error;
     }
 }
 export async function GetReclamationById(id:string): Promise<any> {
-    try {
-        const cookie_ = cookie.get('token-cookie') 
+    try { 
         const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${root}/${id}`
 
-        console.log(url)
-        const response = await axios.delete(url,{
+        console.log(url)  
+        const token = cookies().get('token-cookie');
+        if(token!=undefined){
+        const cookie_ = token.value
+         const response = await axios.get(url, {
             headers: {
-                'Authorization': cookie_
+                'Authorization': `Bearer ${cookie_}`
             }
-            
-        })
+        });
         return response.data.data 
- 
+    }
     } catch (error) {
         throw error;
     }

@@ -3,14 +3,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { useDataFetching } from "../Utils/util";
 import { GetServiceProvidersDetails, LogoutServiceProvider } from "@/api/ServiceProvider/Services";
+import { useRouter } from "next/navigation";
  
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const {data,error,loading} = useDataFetching<IServiceProvider>(GetServiceProvidersDetails)
-
-  console.log(data)
-
  
+  const router = useRouter();
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
@@ -46,6 +45,7 @@ const DropdownUser = () => {
   const handleLogout = () => {
      try {
          LogoutServiceProvider()
+         router.push("/auth/signin") 
      } catch(error:any) {
        console.log(error)
      }
