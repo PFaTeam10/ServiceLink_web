@@ -1,7 +1,6 @@
 "use server";
 
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; 
 import { cookies } from "next/headers";
 import { NextResponse } from 'next/server';
 
@@ -58,8 +57,11 @@ export async function GetServiceProviderID() {
     try {
         const token = cookies().get('token-cookie'); 
         if (token !== undefined) {
-            const decodedToken = jwtDecode(token.value).sub;
-            return decodedToken;
+
+            console.log(token.value)
+            const id = jwtDecode(token.value).sub;
+            console.log(id)
+            return id;
         }
     } catch (error: any) {
         throw error;

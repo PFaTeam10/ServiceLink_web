@@ -4,7 +4,10 @@
   useEffect, 
 } from 'react';
   
-  
+import Cookies from 'universal-cookie';
+
+import { jwtDecode } from 'jwt-decode'; 
+     
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client'; 
 import DefaultLayout from '@/components/Layouts/DefaultLayout'; 
@@ -25,7 +28,7 @@ var client:any =null;
  
 
 export default function Chat() {
-
+  const cookie = new Cookies()  
   const [newMessage, setNewMessage] = useState<string>();
   
    const [messages, setMessages] = useState<IMessage[]>([]); 
@@ -53,9 +56,11 @@ export default function Chat() {
     
   
     const onConnected = () => {
-      const id = GetServiceProviderID()
-      console.log('onConnected',id);
      
+      const token = cookie.get('token-cookie');
+      console.log("TOKEN",token)
+      const id = jwtDecode(token).sub;
+      console.log("id",id)
         client?.subscribe('/chatroom/public', onMessageReceived); 
         client.publish({
           destination: '/app/join',
@@ -83,8 +88,11 @@ export default function Chat() {
   
     useEffect(() => {
       const onConnected = () => {
-        const id= GetServiceProviderID()
-        console.log('onConnected',id);
+        const token = cookie.get('token-cookie');
+        console.log("TOKEN",token)
+        const id = jwtDecode(token).sub;
+        console.log("id",id)
+    
        
           client?.subscribe('/chatroom/public', onMessageReceived); 
           client.publish({
@@ -116,8 +124,12 @@ export default function Chat() {
 
  
     const handleSendMessage = () => { 
-      console.log("client : ",client)
-      const id= GetServiceProviderID()
+   
+     
+      const token = cookie.get('token-cookie');
+      console.log("TOKEN",token)
+      const id = jwtDecode(token).sub;
+      console.log("id",id)
       if(client){
 
         const chatMessage = {   

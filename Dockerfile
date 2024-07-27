@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Set the environment variable for the build
-ARG NEXT_PUBLIC_BACKEND_URL=http://backend.service-link.com
+ARG NEXT_PUBLIC_BACKEND_URL=http://backend-service:8080
 ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
 
 # Build the application
