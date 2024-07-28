@@ -53,20 +53,20 @@ export async function GetServiceProvidersDetails() {
     }
 }
 
-export async function GetServiceProviderID() {
-    try {
-        const token = cookies().get('token-cookie'); 
-        if (token !== undefined) {
+// export async function GetServiceProviderID() {
+//     try {
+//         const token = cookies().get('token-cookie'); 
+//         if (token !== undefined) {
 
-            console.log(token.value)
-            const id = jwtDecode(token.value).sub;
-            console.log(id)
-            return id;
-        }
-    } catch (error: any) {
-        throw error;
-    }
-}
+//             console.log(token.value)
+//             const id = jwtDecode(token.value).sub;
+//             console.log(id)
+//             return id;
+//         }
+//     } catch (error: any) {
+//         throw error;
+//     }
+// }
 
 export async function LogoutServiceProvider() {
     try {

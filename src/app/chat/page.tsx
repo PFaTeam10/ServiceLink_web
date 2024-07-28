@@ -6,12 +6,11 @@
   
 import Cookies from 'universal-cookie';
 
-import { jwtDecode } from 'jwt-decode'; 
+import {jwtDecode} from 'jwt-decode'; 
      
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client'; 
 import DefaultLayout from '@/components/Layouts/DefaultLayout'; 
-import { GetServiceProviderID } from '@/api/ServiceProvider/Services';
 
  
 function formatDate(date: any): string {
@@ -28,7 +27,7 @@ var client:any =null;
  
 
 export default function Chat() {
-  const cookie = new Cookies()  
+
   const [newMessage, setNewMessage] = useState<string>();
   
    const [messages, setMessages] = useState<IMessage[]>([]); 
@@ -56,11 +55,10 @@ export default function Chat() {
     
   
     const onConnected = () => {
-     
+      const cookie = new Cookies()  
       const token = cookie.get('token-cookie');
-      console.log("TOKEN",token)
-      const id = jwtDecode(token).sub;
-      console.log("id",id)
+      const decodedToken: any = jwtDecode(token); // Optionally specify type for `decodedToken`
+        const id = decodedToken.sub;
         client?.subscribe('/chatroom/public', onMessageReceived); 
         client.publish({
           destination: '/app/join',
@@ -88,9 +86,11 @@ export default function Chat() {
   
     useEffect(() => {
       const onConnected = () => {
+        const cookie = new Cookies()  
         const token = cookie.get('token-cookie');
         console.log("TOKEN",token)
-        const id = jwtDecode(token).sub;
+        const decodedToken: any = jwtDecode(token); // Optionally specify type for `decodedToken`
+        const id = decodedToken.sub;
         console.log("id",id)
     
        
@@ -125,10 +125,11 @@ export default function Chat() {
  
     const handleSendMessage = () => { 
    
-     
+      const cookie = new Cookies()  
       const token = cookie.get('token-cookie');
       console.log("TOKEN",token)
-      const id = jwtDecode(token).sub;
+      const decodedToken: any = jwtDecode(token); // Optionally specify type for `decodedToken`
+        const id = decodedToken.sub;
       console.log("id",id)
       if(client){
 
