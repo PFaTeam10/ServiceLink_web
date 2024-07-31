@@ -40,7 +40,7 @@ const Modal: React.FC<ModalProps> = ({ reclamation, onClose }) => {
           <Carousel className="mb-4" showThumbs={false} infiniteLoop useKeyboardArrows autoPlay>
             {reclamation.media.map((uri: any, index: number) => (
               <div key={index}> 
-                <Image className="carousel-image" src={uri} alt={`Media ${index + 1}`} />
+                <Image width={200} className="carousel-image w-auto" src={uri} alt={`Media ${index + 1}`} />
               </div>
             ))}
           </Carousel>

@@ -19,6 +19,7 @@ export async function SigninServiceProvider(data: any): Promise<any> {
     
         return response.data;  
     } catch (error: any) {
+        console.log(error)
         throw error;
     }
 }
@@ -33,7 +34,6 @@ export async function SignupServiceProvider(data: any): Promise<any> {
     }
 }
 
- 
 
 export async function GetServiceProvidersDetails() {
     try {
